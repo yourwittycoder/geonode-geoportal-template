@@ -28,32 +28,38 @@ try:
 except ImportError:
     from geonode.settings import *
 
+# Sustain GeoPortal: use direct OGR/PostGIS import instead of dynamic models
+IMPORTER_ENABLE_DYN_MODELS = False
+
+# Sustain GeoPortal custom middleware
+MIDDLEWARE = MIDDLEWARE + (
+	"geonode_project.middleware.login_required.SustainLoginRequiredMiddleware",
+)
+
 #
 # General Django development settings
 #
-PROJECT_NAME = "geonode_project"
+PROJECT_NAME = "sustain_geoportal"
 
 # add trailing slash to site url. geoserver url will be relative to this
 if not SITEURL.endswith("/"):
     SITEURL = "{}/".format(SITEURL)
 
-SITENAME = os.getenv("SITENAME", "geonode_project")
+SITENAME = os.getenv("SITENAME", "sustain_geoportal")
 
 # Defines the directory that contains the settings file as the LOCAL_ROOT
 # It is used for relative settings elsewhere.
 LOCAL_ROOT = os.path.abspath(os.path.dirname(__file__))
 
-WSGI_APPLICATION = "{}.wsgi.application".format(PROJECT_NAME)
+WSGI_APPLICATION = "geonode_project.wsgi.application"
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "en")
 
-if PROJECT_NAME not in INSTALLED_APPS:
-    INSTALLED_APPS += (PROJECT_NAME,)
 
 # Location of url mappings
-ROOT_URLCONF = os.getenv("ROOT_URLCONF", "{}.urls".format(PROJECT_NAME))
+ROOT_URLCONF = "geonode_project.urls"
 
 # Additional directories which hold static files
 # - Give priority to local geonode-project ones
@@ -77,3 +83,7 @@ TEMPLATES[0].pop("APP_DIRS", None)
 PROJECT_FIXTURES = [
     # List project-related fixture files here, in the order they should be loaded.
 ]
+
+# Disable Memcached cache for Sustain GeoPortal
+if "memcached" in CACHES:
+    del CACHES["memcached"]

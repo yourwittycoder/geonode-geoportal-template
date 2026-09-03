@@ -1,0 +1,845 @@
+/*
+=========================================================
+Sustain EA GeoPortal
+Custom CSS Overrides
+=========================================================
+*/
+
+/* Loaded here (CSS side) rather than as an HTML <link> so it's fetched
+   on every page that loads this stylesheet, not just the homepage. */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap");
+
+:root {
+    --sustain-dark: #2a4745;
+    --sustain-primary: #355c53;
+    --sustain-green: #84c55c;
+    --sustain-accent: #8BC34A;
+    --sustain-light: #ffffff;
+    --shadow: 0 4px 14px rgba(0, 0, 0, .12);
+
+    /* Open Sans, loaded via @import above. System fallbacks only kick in
+       on the off chance the Google Fonts request is ever blocked. */
+    --font-body:
+        "Open Sans",
+        -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Helvetica, Arial,
+        sans-serif;
+
+    /* Tints of the palette above — same hues, used at low opacity for
+       backgrounds, borders and muted text instead of introducing new colors */
+    --dark-04: rgba(42, 71, 69, 0.04);
+    --dark-06: rgba(42, 71, 69, 0.06);
+    --dark-08: rgba(42, 71, 69, 0.08);
+    --dark-12: rgba(42, 71, 69, 0.12);
+    --dark-45: rgba(42, 71, 69, 0.45);
+    --dark-65: rgba(42, 71, 69, 0.65);
+
+    --green-10: rgba(132, 197, 92, 0.10);
+    --green-16: rgba(132, 197, 92, 0.16);
+    --green-55: rgba(132, 197, 92, 0.55);
+
+    --premium-shadow: 0 10px 28px rgba(42, 71, 69, 0.08);
+    --premium-shadow-hover: 0 14px 32px rgba(42, 71, 69, 0.12);
+}
+
+/* =========================================================
+   Base type
+   ========================================================= */
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+.tooltip,
+.popover,
+.navbar,
+.modal,
+.dropdown-menu,
+.gn-homepage h1,
+.gn-homepage h2,
+.gn-homepage h3,
+.sustain-catalog-title,
+.sustain-catalog-detail-header h3 {
+    font-family: var(--font-body) !important;
+}
+
+/* =========================================================
+   Layout containers
+   ========================================================= */
+
+.gn-homepage .gn-container {
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.gn-homepage .gn-content {
+    padding-top: 0 !important;
+}
+
+/* =========================================================
+   Add Resource — sits inline with the Project Catalog header
+   ========================================================= */
+
+.sustain-add-resource {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.sustain-resource-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+
+    min-width: 220px;
+    padding: 12px 16px;
+
+    background: var(--sustain-light);
+    border: 1px solid var(--dark-08);
+    border-radius: 10px;
+
+    color: var(--sustain-dark);
+    text-decoration: none;
+    cursor: pointer;
+
+    box-shadow: var(--premium-shadow);
+
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
+}
+
+.sustain-resource-action:hover {
+    color: var(--sustain-dark);
+    text-decoration: none;
+
+    border-color: var(--green-55);
+    box-shadow: var(--premium-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.sustain-resource-action-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+
+    border-radius: 8px;
+
+    background: var(--sustain-green);
+    color: var(--sustain-light);
+
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.sustain-resource-action strong {
+    display: block;
+    margin: 0 0 2px;
+    color: var(--sustain-dark);
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.sustain-resource-action small {
+    display: block;
+    color: var(--dark-65);
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.sustain-add-resource-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 20;
+
+    min-width: 250px;
+    padding: 6px;
+
+    background: var(--sustain-light);
+    border: 1px solid var(--dark-08);
+    border-radius: 12px;
+    box-shadow: var(--premium-shadow-hover);
+}
+
+.sustain-add-resource-menu[hidden] {
+    display: none;
+}
+
+.sustain-add-resource-menu a {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    padding: 10px 12px;
+    border-radius: 8px;
+
+    text-decoration: none;
+    color: var(--sustain-dark);
+
+    transition: background 0.12s ease;
+}
+
+.sustain-add-resource-menu a:hover {
+    background: var(--dark-04);
+    text-decoration: none;
+    color: var(--sustain-dark);
+}
+
+.sustain-add-resource-menu a strong {
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+.sustain-add-resource-menu a span {
+    font-size: 11.5px;
+    color: var(--dark-65);
+}
+
+@media (max-width: 640px) {
+    .sustain-catalog-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sustain-resource-action {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .sustain-add-resource-menu {
+        left: 0;
+        right: 0;
+        width: auto;
+    }
+}
+
+/* =========================================================
+   Catalog — header
+   ========================================================= */
+
+.sustain-catalog {
+    margin-bottom: 56px;
+}
+
+.sustain-catalog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 0 0 20px;
+}
+
+.sustain-catalog-title {
+    margin: 0;
+    color: var(--sustain-dark);
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.2px;
+}
+
+.sustain-catalog-subtitle {
+    margin: 7px 0 0;
+    color: var(--dark-65);
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   Catalog — two-pane body
+   ========================================================= */
+
+.sustain-catalog-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+/* ---- Left pane: list ----
+   Sticks in place as the page scrolls, capped to the viewport height,
+   with its own internal scroll for the rows. The right pane is NOT
+   height-constrained — it just flows normally with the page. */
+
+.sustain-catalog-list-pane {
+    flex: 0 0 350px;
+    position: sticky !important;
+    top: 24px !important;
+    max-height: calc(100vh - 48px) !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0;
+
+    background: var(--sustain-light);
+    border: 1px solid var(--dark-08);
+    border-radius: 14px;
+    box-shadow: var(--premium-shadow);
+    overflow: hidden !important;
+}
+
+.sustain-catalog-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    padding: 18px 18px 4px;
+    flex: 0 0 auto;
+}
+
+.sustain-catalog-search-icon {
+    position: absolute;
+    left: 31px;
+    color: var(--dark-45);
+    pointer-events: none;
+}
+
+.sustain-catalog-search input {
+    width: 100%;
+    padding: 10px 14px 10px 36px;
+
+    background: var(--dark-04);
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--sustain-dark);
+
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sustain-catalog-search input:focus {
+    outline: none;
+    background: var(--sustain-light);
+    border-color: var(--green-55);
+    box-shadow: 0 0 0 3px var(--green-16);
+}
+
+.sustain-catalog-search input::placeholder {
+    color: var(--dark-45);
+}
+
+.sustain-catalog-count {
+    display: block;
+    flex: 0 0 auto;
+    padding: 8px 20px 12px;
+    color: var(--dark-45);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.sustain-catalog-list-scroll {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    padding: 0 8px 12px;
+}
+
+.sustain-catalog-group-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+
+    padding: 8px 10px 6px;
+    margin-top: 4px;
+
+    background: var(--sustain-light);
+    color: var(--sustain-green);
+
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.sustain-catalog-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+
+    padding: 12px 12px;
+    margin-bottom: 2px;
+
+    background: none;
+    border: none;
+    border-radius: 9px;
+
+    text-align: left;
+    cursor: pointer;
+
+    transition: background 0.12s ease;
+}
+
+.sustain-catalog-row:hover {
+    background: var(--dark-04);
+}
+
+.sustain-catalog-row.is-active {
+    background: var(--green-16);
+}
+
+.sustain-catalog-row-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sustain-catalog-row-title {
+    color: var(--sustain-dark);
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sustain-catalog-row.is-active .sustain-catalog-row-title {
+    color: var(--sustain-primary);
+}
+
+.sustain-catalog-row-desc {
+    color: var(--dark-45);
+    font-size: 11.5px;
+    line-height: 1.35;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sustain-catalog-row-arrow {
+    flex: 0 0 auto;
+    color: var(--dark-12);
+    font-size: 13px;
+    opacity: 0;
+    transform: translateX(-3px);
+    transition: opacity 0.15s ease, transform 0.15s ease, color 0.15s ease;
+}
+
+.sustain-catalog-row:hover .sustain-catalog-row-arrow,
+.sustain-catalog-row.is-active .sustain-catalog-row-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.sustain-catalog-row.is-active .sustain-catalog-row-arrow {
+    color: var(--sustain-green);
+}
+
+.sustain-catalog-list-empty {
+    padding: 34px 18px;
+    color: var(--dark-65);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ---- Right pane: detail ---- */
+
+.sustain-catalog-detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: calc(100vh - 48px);
+
+    background: var(--sustain-light);
+    border: 1px solid var(--dark-08);
+    border-radius: 14px;
+    box-shadow: var(--premium-shadow);
+    overflow: hidden;
+}
+
+.sustain-catalog-detail-inner {
+    display: flex;
+    flex-direction: column;
+}
+
+.sustain-catalog-detail-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    padding: 40px;
+    text-align: center;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.sustain-catalog-detail-empty-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+
+    border-radius: 14px;
+    background: var(--green-10);
+    color: var(--sustain-primary);
+}
+
+.sustain-catalog-detail-empty h3 {
+    margin: 0;
+    color: var(--sustain-dark);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.sustain-catalog-detail-empty p {
+    margin: 0;
+    color: var(--dark-65);
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+.sustain-catalog-detail-loading,
+.sustain-catalog-detail-error {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-65);
+    font-size: 13.5px;
+    text-align: center;
+    padding: 40px;
+}
+
+.sustain-catalog-detail-header {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+
+    padding: 24px 28px 20px;
+    flex: 0 0 auto;
+}
+
+.sustain-catalog-detail-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+
+    border-radius: 12px;
+    background: var(--green-10);
+    color: var(--sustain-primary);
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sustain-catalog-detail-header h3 {
+    margin: 0 0 5px;
+    color: var(--sustain-dark);
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.1px;
+}
+
+.sustain-catalog-detail-header p {
+    margin: 0;
+    color: var(--dark-65);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.sustain-catalog-tabs {
+    display: flex;
+    gap: 4px;
+
+    margin: 0 28px 16px;
+    padding: 4px;
+
+    background: var(--dark-04);
+    border-radius: 10px;
+    flex: 0 0 auto;
+    width: fit-content;
+}
+
+.sustain-catalog-tab {
+    padding: 8px 16px;
+
+    background: none;
+    border: none;
+    border-radius: 7px;
+
+    color: var(--dark-65);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sustain-catalog-tab span {
+    margin-left: 6px;
+    color: var(--dark-45);
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+.sustain-catalog-tab:hover {
+    color: var(--sustain-dark);
+}
+
+.sustain-catalog-tab.is-active {
+    background: var(--sustain-light);
+    color: var(--sustain-dark);
+    box-shadow: 0 2px 6px rgba(42, 71, 69, 0.10);
+}
+
+.sustain-catalog-tab.is-active span {
+    color: var(--sustain-green);
+}
+
+.sustain-catalog-resource-toolbar {
+    padding: 0 28px 14px;
+    flex: 0 0 auto;
+}
+
+.sustain-catalog-resource-toolbar input {
+    width: 100%;
+    max-width: 320px;
+    padding: 9px 14px;
+
+    background: var(--dark-04);
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--sustain-dark);
+
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sustain-catalog-resource-toolbar input:focus {
+    outline: none;
+    background: var(--sustain-light);
+    border-color: var(--green-55);
+    box-shadow: 0 0 0 3px var(--green-16);
+}
+
+.sustain-catalog-resource-toolbar input::placeholder {
+    color: var(--dark-45);
+}
+
+.sustain-catalog-resource-list {
+    padding: 0 20px 16px;
+    border-top: 1px solid var(--dark-08);
+}
+
+.sustain-resource-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 13px 12px;
+    margin-top: 6px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+    color: inherit;
+
+    transition: background 0.12s ease;
+}
+
+.sustain-resource-row:hover {
+    background: var(--dark-04);
+    text-decoration: none;
+    color: inherit;
+}
+
+.sustain-resource-row-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sustain-resource-row-title {
+    color: var(--sustain-dark);
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.sustain-resource-row-abstract {
+    color: var(--dark-45);
+    font-size: 12px;
+    line-height: 1.45;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sustain-resource-row-arrow {
+    flex: 0 0 auto;
+    color: var(--dark-12);
+    font-size: 13px;
+    opacity: 0;
+    transform: translateX(-3px);
+    transition: opacity 0.15s ease, transform 0.15s ease, color 0.15s ease;
+}
+
+.sustain-resource-row:hover .sustain-resource-row-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--sustain-green);
+}
+
+.sustain-catalog-resource-empty {
+    padding: 40px 12px;
+    color: var(--dark-65);
+    font-size: 13px;
+    text-align: center;
+}
+
+.sustain-catalog-show-more {
+    display: block;
+    margin: 16px auto 8px;
+    padding: 10px 20px;
+
+    background: transparent;
+    border: 1px solid var(--dark-12);
+    border-radius: 9px;
+
+    color: var(--sustain-primary);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.sustain-catalog-show-more:hover {
+    background: var(--sustain-primary);
+    border-color: var(--sustain-primary);
+    color: var(--sustain-light);
+}
+
+/* =========================================================
+   Loading indicator (three-dot bounce)
+   ========================================================= */
+
+.gn-main-loader {
+    width: 3.5em !important;
+    height: 1.5em !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: none !important;
+    animation: none !important;
+    position: relative;
+}
+
+.gn-main-loader::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 0.7em;
+    height: 0.7em;
+    margin-top: -0.35em;
+    border-radius: 50%;
+    background: var(--sustain-accent);
+    box-shadow: 1.4em 0 0 var(--sustain-accent), 2.8em 0 0 var(--sustain-accent);
+    animation: sustain-loader-bounce 1.2s infinite ease-in-out;
+}
+
+.gn-main-loader::after {
+    display: none;
+}
+
+@keyframes sustain-loader-bounce {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-0.6em);
+    }
+}
+
+.gn-main-event-text {
+    font-family: var(--font-body) !important;
+}
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+
+@media (max-width: 860px) {
+    .sustain-catalog-body {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .sustain-catalog-list-pane {
+        position: static !important;
+        max-height: none !important;
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .sustain-catalog-list-scroll {
+        max-height: 320px !important;
+    }
+
+    .sustain-catalog-detail {
+        width: 100%;
+        min-height: 380px;
+    }
+}
+
+@media (max-width: 768px) {
+    .gn-homepage .gn-container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .sustain-catalog-title {
+        font-size: 21px;
+    }
+
+    .sustain-catalog-detail-header {
+        padding: 20px 18px 16px;
+    }
+
+    .sustain-catalog-tabs {
+        margin-left: 18px;
+        margin-right: 18px;
+    }
+
+    .sustain-catalog-resource-toolbar {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .sustain-catalog-resource-list {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}

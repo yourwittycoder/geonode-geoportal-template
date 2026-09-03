@@ -1,0 +1,575 @@
+{% load static %}
+{% load client_version %}
+<!DOCTYPE html>
+<html class="msgapi">
+    <head>
+        {% include './geonode-mapstore-client/snippets/head.html' %}
+        {% include './geonode-mapstore-client/snippets/loader_style.html' %}
+        <link rel="icon" type="image/png" href="{% static 'sustain-ea-favicon.png' %}">
+        <link rel="stylesheet" href="{% static 'css/site_base.css' %}">
+
+        {% block custom_theme %}
+            {% include './geonode-mapstore-client/snippets/custom_theme.html' %}
+        {% endblock %}
+
+        {% block extra_style %}
+        {% endblock %}
+
+        {% block extra_head %}
+        {% endblock %}
+    </head>
+    <body class="msgapi ms2" data-ms2-container="ms2">
+        <div class="gn-page-wrapper {% if request.user_agent.is_mobile %}gn-mobile{% else %}gn-desktop{% endif %}">
+            <div class="gn-theme gn-homepage">
+                {% include './geonode-mapstore-client/_geonode_config.html' %}
+                {% block header %}
+                    {% include './geonode-mapstore-client/snippets/header.html' with show_hero=True %}
+                {% endblock %}
+
+                {% block content %}
+                    <div class="gn-container">
+                        <section class="sustain-catalog">
+                            <div class="sustain-catalog-header">
+                                <div class="sustain-catalog-heading">
+                                    <h2 class="sustain-catalog-title">Project Catalog</h2>
+                                    <p class="sustain-catalog-subtitle">Browse spatial resources across every Sustain project</p>
+                                </div>
+
+                                <div class="sustain-add-resource" id="sustain-add-resource">
+                                    <button
+                                        type="button"
+                                        class="sustain-resource-action sustain-resource-action-primary sustain-add-resource-trigger"
+                                        id="sustain-add-resource-trigger"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <span class="sustain-resource-action-icon">+</span>
+                                        <span>
+                                            <strong>Add Resource</strong>
+                                            <small>Upload a dataset or document</small>
+                                        </span>
+                                    </button>
+
+                                    <div class="sustain-add-resource-menu" id="sustain-add-resource-menu" role="menu" hidden>
+                                        <a href="/catalogue/#/upload/dataset" role="menuitem">
+                                            <strong>Upload Dataset</strong>
+                                            <span>Add a spatial data layer</span>
+                                        </a>
+                                        <a href="/catalogue/#/upload/document" role="menuitem">
+                                            <strong>Upload Document</strong>
+                                            <span>Add a PDF, image, or file</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sustain-catalog-body">
+                                <aside
+                                    class="sustain-catalog-list-pane"
+                                    style="position:sticky !important; top:24px !important; max-height:calc(100vh - 48px) !important; display:flex !important; flex-direction:column !important; overflow:hidden !important;"
+                                >
+                                    <div class="sustain-catalog-search">
+                                        <svg class="sustain-catalog-search-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.4"/>
+                                            <line x1="11.1" y1="11.1" x2="15" y2="15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                                        </svg>
+                                        <input
+                                            type="text"
+                                            id="sustain-project-search-input"
+                                            placeholder="Search projects..."
+                                            autocomplete="off"
+                                        />
+                                    </div>
+                                    <span class="sustain-catalog-count" id="sustain-catalog-count"></span>
+
+                                    <div
+                                        class="sustain-catalog-list-scroll"
+                                        id="sustain-catalog-list"
+                                        style="flex:1 1 auto !important; min-height:0 !important; overflow-y:auto !important;"
+                                    ></div>
+                                </aside>
+
+                                <div class="sustain-catalog-detail" id="sustain-catalog-detail">
+                                    <div class="sustain-catalog-detail-empty">
+                                        <div class="sustain-catalog-detail-empty-mark" aria-hidden="true">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 3L21 7.5L12 12L3 7.5L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                                <path d="M3 12L12 16.5L21 12" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                                <path d="M3 16.5L12 21L21 16.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <h3>No project selected</h3>
+                                        <p>Select a project from the list to browse its datasets, documents, and maps.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <script>
+                        window.addEventListener('mapstore:ready', function() {
+
+                            const listEl = document.getElementById('sustain-catalog-list');
+                            const countEl = document.getElementById('sustain-catalog-count');
+                            const searchInput = document.getElementById('sustain-project-search-input');
+                            const detailEl = document.getElementById('sustain-catalog-detail');
+                            const addResourceWrapper = document.getElementById('sustain-add-resource');
+                            const addResourceTrigger = document.getElementById('sustain-add-resource-trigger');
+                            const addResourceMenu = document.getElementById('sustain-add-resource-menu');
+
+                            if (!listEl || !detailEl) {
+                                return;
+                            }
+
+                            const excludedGroups = [
+                                'gis-team',
+                                'viewers'
+                            ];
+
+                            const resourceTypes = [
+                                { type: 'dataset', label: 'Datasets' },
+                                { type: 'document', label: 'Documents' },
+                                { type: 'map', label: 'Maps' }
+                            ];
+
+                            const GROUP_PAGE_SIZE = 25;
+                            const RESOURCE_PAGE_SIZE = 20;
+
+                            let allGroups = [];
+                            let currentGroupsPage = 1;
+                            let totalGroupCount = null;
+
+                            let activeGroup = null;
+                            let activeResources = [];
+                            let activeType = 'dataset';
+                            let visibleCount = RESOURCE_PAGE_SIZE;
+
+                            function firstLetterOf(title) {
+                                const match = (title || '').trim().match(/[A-Za-z]/);
+                                return match ? match[0].toUpperCase() : '#';
+                            }
+
+                            function escapeHtml(str) {
+                                const div = document.createElement('div');
+                                div.textContent = str || '';
+                                return div.innerHTML;
+                            }
+
+                            /* ---------- Add Resource menu ---------- */
+
+                            if (addResourceTrigger && addResourceMenu) {
+                                addResourceTrigger.addEventListener('click', function(event) {
+                                    event.stopPropagation();
+                                    const isOpen = !addResourceMenu.hidden;
+                                    addResourceMenu.hidden = isOpen;
+                                    addResourceTrigger.setAttribute('aria-expanded', String(!isOpen));
+                                });
+
+                                document.addEventListener('click', function(event) {
+                                    if (!addResourceWrapper.contains(event.target)) {
+                                        addResourceMenu.hidden = true;
+                                        addResourceTrigger.setAttribute('aria-expanded', 'false');
+                                    }
+                                });
+
+                                document.addEventListener('keydown', function(event) {
+                                    if (event.key === 'Escape') {
+                                        addResourceMenu.hidden = true;
+                                        addResourceTrigger.setAttribute('aria-expanded', 'false');
+                                    }
+                                });
+                            }
+
+                            /* ---------- URL hash: remember selection across navigation ---------- */
+
+                            function parseHash() {
+                                if (!window.location.hash || window.location.hash.length < 2) return null;
+                                const params = new URLSearchParams(window.location.hash.slice(1));
+                                const pk = params.get('project');
+                                const type = params.get('type');
+                                if (!pk) return null;
+                                return { pk: pk, type: type || 'dataset' };
+                            }
+
+                            function updateHash(pk, type) {
+                                const newHash = '#project=' + encodeURIComponent(pk) + '&type=' + encodeURIComponent(type);
+                                history.replaceState(null, '', window.location.pathname + window.location.search + newHash);
+                            }
+
+                            /* ---------- Groups: fetch every page up front, then render ---------- */
+
+                            function applyGroupsPage(data) {
+                                const incoming = (data.group_profiles || [])
+                                    .filter(function(group) { return !excludedGroups.includes(group.slug); });
+
+                                allGroups = allGroups.concat(incoming);
+
+                                if (typeof data.total === 'number') {
+                                    totalGroupCount = data.total;
+                                }
+
+                                return incoming.length;
+                            }
+
+                            function fetchGroupsPage(page) {
+                                return fetch('/api/v2/groups/?page_size=' + GROUP_PAGE_SIZE + '&page=' + page, { credentials: 'same-origin' })
+                                    .then(function(response) {
+                                        if (!response.ok) throw new Error('Unable to load GeoNode groups: ' + response.status);
+                                        return response.json();
+                                    });
+                            }
+
+                            const MAX_GROUP_PAGES = 40; // safety cap only - stops a runaway loop if `total` is ever wrong
+
+                            function loadAllGroups() {
+                                allGroups = [];
+                                totalGroupCount = null;
+
+                                function nextPage(page) {
+                                    return fetchGroupsPage(page).then(function(data) {
+                                        const count = applyGroupsPage(data);
+
+                                        const doneByTotal = typeof totalGroupCount === 'number' && allGroups.length >= totalGroupCount;
+                                        const doneByShortPage = count < GROUP_PAGE_SIZE;
+                                        const doneBySafetyCap = page >= MAX_GROUP_PAGES;
+
+                                        if (doneByTotal || doneByShortPage || doneBySafetyCap) {
+                                            return;
+                                        }
+
+                                        return nextPage(page + 1);
+                                    });
+                                }
+
+                                return nextPage(1).then(function() {
+                                    allGroups.sort(function(a, b) {
+                                        return (a.title || '').localeCompare(b.title || '', undefined, { sensitivity: 'base' });
+                                    });
+                                });
+                            }
+
+                            function ensureGroupLoaded(pk) {
+                                const existing = allGroups.find(function(g) { return String(g.pk) === String(pk); });
+                                return Promise.resolve(existing || null);
+                            }
+
+                            function groupByLetter(groups) {
+                                const buckets = {};
+                                groups.forEach(function(group) {
+                                    const letter = firstLetterOf(group.title);
+                                    if (!buckets[letter]) buckets[letter] = [];
+                                    buckets[letter].push(group);
+                                });
+                                return buckets;
+                            }
+
+                            function createRow(group) {
+                                const row = document.createElement('button');
+                                row.type = 'button';
+                                row.className = 'sustain-catalog-row';
+                                row.setAttribute('data-pk', group.pk);
+
+                                row.innerHTML = `
+                                    <span class="sustain-catalog-row-body">
+                                        <span class="sustain-catalog-row-title">${escapeHtml(group.title)}</span>
+                                        ${group.description ? `<span class="sustain-catalog-row-desc">${escapeHtml(group.description)}</span>` : ''}
+                                    </span>
+                                    <span class="sustain-catalog-row-arrow">?</span>
+                                `;
+
+                                row.addEventListener('click', function() {
+                                    setActiveRow(group.pk);
+                                    openProject(group);
+                                });
+
+                                return row;
+                            }
+
+                            function setActiveRow(pk) {
+                                document.querySelectorAll('.sustain-catalog-row.is-active').forEach(function(el) {
+                                    el.classList.remove('is-active');
+                                });
+                                const row = listEl.querySelector('.sustain-catalog-row[data-pk="' + pk + '"]');
+                                if (row) row.classList.add('is-active');
+                                return row;
+                            }
+
+                            function renderList(groups) {
+                                listEl.innerHTML = '';
+
+                                if (!groups.length) {
+                                    const empty = document.createElement('div');
+                                    empty.className = 'sustain-catalog-list-empty';
+                                    empty.textContent = 'No projects match your search.';
+                                    listEl.appendChild(empty);
+                                } else {
+                                    const buckets = groupByLetter(groups);
+                                    const letters = Object.keys(buckets).sort();
+
+                                    letters.forEach(function(letter) {
+                                        const header = document.createElement('div');
+                                        header.className = 'sustain-catalog-group-header';
+                                        header.textContent = letter;
+                                        listEl.appendChild(header);
+
+                                        buckets[letter].forEach(function(group) {
+                                            listEl.appendChild(createRow(group));
+                                        });
+                                    });
+                                }
+
+                                if (activeGroup) {
+                                    setActiveRow(activeGroup.pk);
+                                }
+                            }
+
+                            function updateCount(filteredCount, isSearching) {
+                                if (isSearching) {
+                                    countEl.textContent = filteredCount + ' of ' + allGroups.length;
+                                    return;
+                                }
+
+                                countEl.textContent = allGroups.length + (allGroups.length === 1 ? ' project' : ' projects');
+                            }
+
+                            function filterAndRenderList(query) {
+                                const trimmed = query.trim().toLowerCase();
+
+                                const filtered = trimmed
+                                    ? allGroups.filter(function(group) {
+                                        return (group.title || '').toLowerCase().indexOf(trimmed) !== -1;
+                                    })
+                                    : allGroups;
+
+                                renderList(filtered);
+                                updateCount(filtered.length, !!trimmed);
+                            }
+
+                            /* ---------- Right pane: project detail ---------- */
+
+                            function countByType(resources, type) {
+                                return resources.filter(function(r) { return r.resource_type === type; }).length;
+                            }
+
+                            function renderDetailShell(group) {
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'sustain-catalog-detail-inner';
+
+                                wrapper.innerHTML = `
+                                    <div class="sustain-catalog-detail-header">
+                                        <span class="sustain-catalog-detail-initial">${firstLetterOf(group.title)}</span>
+                                        <div>
+                                            <h3>${escapeHtml(group.title)}</h3>
+                                            ${group.description ? `<p>${escapeHtml(group.description)}</p>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="sustain-catalog-tabs" id="sustain-catalog-tabs"></div>
+                                    <div class="sustain-catalog-resource-toolbar">
+                                        <input type="text" id="sustain-resource-filter-input" placeholder="Filter this list..." autocomplete="off" />
+                                    </div>
+                                    <div class="sustain-catalog-resource-list" id="sustain-catalog-resource-list"></div>
+                                `;
+
+                                detailEl.innerHTML = '';
+                                detailEl.appendChild(wrapper);
+                            }
+
+                            function renderTabs(resources) {
+                                const tabsEl = document.getElementById('sustain-catalog-tabs');
+                                tabsEl.innerHTML = '';
+
+                                resourceTypes.forEach(function(rt) {
+                                    const count = countByType(resources, rt.type);
+
+                                    const btn = document.createElement('button');
+                                    btn.type = 'button';
+                                    btn.className = 'sustain-catalog-tab' + (rt.type === activeType ? ' is-active' : '');
+                                    btn.innerHTML = rt.label + ' <span>' + count + '</span>';
+
+                                    btn.addEventListener('click', function() {
+                                        activeType = rt.type;
+                                        visibleCount = RESOURCE_PAGE_SIZE;
+
+                                        document.querySelectorAll('.sustain-catalog-tab').forEach(function(el) {
+                                            el.classList.remove('is-active');
+                                        });
+                                        btn.classList.add('is-active');
+
+                                        const filterInput = document.getElementById('sustain-resource-filter-input');
+                                        if (filterInput) filterInput.value = '';
+
+                                        renderResourceList();
+
+                                        if (activeGroup) updateHash(activeGroup.pk, activeType);
+                                    });
+
+                                    tabsEl.appendChild(btn);
+                                });
+                            }
+
+                            function renderResourceList() {
+                                const listContainer = document.getElementById('sustain-catalog-resource-list');
+                                if (!listContainer) return;
+
+                                const filterInput = document.getElementById('sustain-resource-filter-input');
+                                const query = filterInput ? filterInput.value.trim().toLowerCase() : '';
+
+                                let matches = activeResources.filter(function(r) {
+                                    return r.resource_type === activeType;
+                                });
+
+                                if (query) {
+                                    matches = matches.filter(function(r) {
+                                        return (r.title || '').toLowerCase().indexOf(query) !== -1;
+                                    });
+                                }
+
+                                listContainer.innerHTML = '';
+
+                                if (!matches.length) {
+                                    const empty = document.createElement('div');
+                                    empty.className = 'sustain-catalog-resource-empty';
+                                    empty.textContent = query
+                                        ? 'Nothing matches your filter.'
+                                        : 'No resources of this type yet.';
+                                    listContainer.appendChild(empty);
+                                    return;
+                                }
+
+                                const shown = matches.slice(0, visibleCount);
+
+                                shown.forEach(function(resource) {
+                                    const link = document.createElement('a');
+                                    link.className = 'sustain-resource-row';
+                                    link.href = resource.detail_url || resource.link || '#';
+
+                                    link.innerHTML = `
+                                        <span class="sustain-resource-row-body">
+                                            <span class="sustain-resource-row-title">${escapeHtml(resource.title || 'Untitled resource')}</span>
+                                            ${resource.abstract ? `<span class="sustain-resource-row-abstract">${escapeHtml(resource.abstract)}</span>` : ''}
+                                        </span>
+                                        <span class="sustain-resource-row-arrow">?</span>
+                                    `;
+
+                                    listContainer.appendChild(link);
+                                });
+
+                                if (matches.length > visibleCount) {
+                                    const more = document.createElement('button');
+                                    more.type = 'button';
+                                    more.className = 'sustain-catalog-show-more';
+                                    more.textContent = 'Show more (' + (matches.length - visibleCount) + ' remaining)';
+                                    more.addEventListener('click', function() {
+                                        visibleCount += RESOURCE_PAGE_SIZE;
+                                        renderResourceList();
+                                    });
+                                    listContainer.appendChild(more);
+                                }
+                            }
+
+                            function openProject(group, initialType) {
+                                activeGroup = group;
+                                activeType = initialType || 'dataset';
+                                visibleCount = RESOURCE_PAGE_SIZE;
+
+                                detailEl.innerHTML = `
+                                    <div class="sustain-catalog-detail-loading">Loading project resources...</div>
+                                `;
+
+                                fetch('/api/v2/groups/' + group.pk + '/resources/', {
+                                    credentials: 'same-origin'
+                                })
+                                .then(function(response) {
+                                    if (!response.ok) {
+                                        throw new Error('Unable to load project resources: ' + response.status);
+                                    }
+                                    return response.json();
+                                })
+                                .then(function(data) {
+                                    activeResources = data.resources || [];
+
+                                    renderDetailShell(group);
+                                    renderTabs(activeResources);
+                                    renderResourceList();
+                                    updateHash(group.pk, activeType);
+
+                                    const filterInput = document.getElementById('sustain-resource-filter-input');
+                                    if (filterInput) {
+                                        filterInput.addEventListener('input', function() {
+                                            visibleCount = RESOURCE_PAGE_SIZE;
+                                            renderResourceList();
+                                        });
+                                    }
+                                })
+                                .catch(function(error) {
+                                    console.error('Sustain GeoPortal project resources:', error);
+                                    detailEl.innerHTML = `
+                                        <div class="sustain-catalog-detail-error">Unable to load project resources.</div>
+                                    `;
+                                });
+                            }
+
+                            function restoreFromHash() {
+                                const parsed = parseHash();
+                                if (!parsed) return;
+
+                                ensureGroupLoaded(parsed.pk).then(function(group) {
+                                    if (!group) return;
+                                    filterAndRenderList(searchInput ? searchInput.value : '');
+                                    setActiveRow(group.pk);
+                                    openProject(group, parsed.type);
+                                });
+                            }
+
+                            /* ---------- Init ---------- */
+
+                            if (searchInput) {
+                                searchInput.addEventListener('input', function() {
+                                    filterAndRenderList(searchInput.value);
+                                });
+                            }
+
+                            loadAllGroups()
+                                .then(function() {
+                                    filterAndRenderList('');
+                                    restoreFromHash();
+                                })
+                                .catch(function(error) {
+                                    console.error('Sustain GeoPortal project browser:', error);
+                                    listEl.innerHTML = `<div class="sustain-catalog-list-empty">Unable to load projects.</div>`;
+                                });
+                        });
+                    </script>
+
+                {% endblock %}
+
+                {% block container %}
+                    <div id="ms-container">
+                        <div class="gn-main-event-container">
+                            <div class="gn-main-event-content">
+                                <div class="gn-main-loader"></div>
+                                <div class="gn-main-event-text"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endblock %}
+
+                {% block ms_scripts %}
+                    <script id="gn-script" src="{% static 'mapstore/dist/js/gn-components.js' %}?{% client_version %}"></script>
+                {% endblock %}
+
+                {% block footer %}
+                    {% include './geonode-mapstore-client/snippets/footer.html' %}
+                {% endblock %}
+
+                {% block scripts %}
+                    <script src="{% static "lib/js/jquery.min.js" %}"></script>
+                    <script src="{% static "lib/js/bootstrap.min.js" %}"></script>
+                    <script type="text/javascript">
+                        // enable dropdown functionalities
+                        $('.dropdown-toggle').dropdown();
+                    </script>
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

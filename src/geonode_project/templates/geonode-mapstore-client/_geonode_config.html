@@ -1,9 +1,9 @@
 {% extends 'geonode-mapstore-client/_geonode_config.html' %}
-{% block override_local_config %}
-<script>
-    window.__GEONODE_CONFIG__.overrideLocalConfig = function(localConfig, _) {
-        // Here the localConfig can be overridden and/or extended
-        return localConfig;
-    };
-</script>
+
+{% block override_settings %}
+    /*
+     * Sustain EA GeoPortal
+     * Downstream MapStore configuration.
+     * GeoNode / MapStore core is not modified.
+     */
 {% endblock %}

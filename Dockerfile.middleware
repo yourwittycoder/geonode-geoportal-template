@@ -1,0 +1,3 @@
+FROM sustain_geoportal/geonode:5.1.x
+
+COPY src/ /usr/src/project/
