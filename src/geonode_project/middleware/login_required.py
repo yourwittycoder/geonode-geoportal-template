@@ -24,6 +24,10 @@ class SustainLoginRequiredMiddleware:
         if request.path.startswith("/static/") or request.path.startswith("/media/"):
             return self.get_response(request)
 
+        # Allow the public GeoPortal landing page.
+        if request.path == "/":
+            return self.get_response(request)
+
         # Allow the login page itself.
         login_url = reverse("account_login")
         if request.path == login_url:
