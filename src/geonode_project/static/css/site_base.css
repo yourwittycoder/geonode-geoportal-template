@@ -843,3 +843,267 @@ select,
         padding-right: 12px;
     }
 }
+
+
+
+/* =========================================================
+   SUSTAIN EA — MAPSTORE / GEONODE RESOURCE PAGES
+   ========================================================= */
+
+/*
+ * MapStore theme variables
+ */
+.msgapi .gn-theme {
+    --ms-font-family-sans-serif: "Open Sans", sans-serif;
+    --ms-font-family-base: "Open Sans", sans-serif;
+
+    --ms-main-bg: var(--sustain-light);
+    --ms-main-color: #333333;
+
+    --ms-main-border-color: #dddddd;
+
+    --ms-link-color: var(--sustain-primary);
+    --ms-link-hover-color: var(--sustain-green);
+
+    --ms-primary: var(--sustain-primary);
+    --ms-primary-contrast: #ffffff;
+
+    --ms-focus-color: var(--sustain-green);
+    --ms-selected-color: var(--sustain-primary);
+    --ms-selected-bg: rgba(132, 197, 92, 0.20);
+    --ms-selected-hover-bg: rgba(132, 197, 92, 0.10);
+
+    --ms-footer-color: #333333;
+    --ms-footer-bg: #ffffff;
+    --ms-footer-link-color: var(--sustain-primary);
+    --ms-footer-link-hover-color: var(--sustain-green);
+
+    --ms-jumbotron-color: #ffffff;
+    --ms-jumbotron-bg: var(--sustain-dark);
+
+    --ms-loader-primary-color: var(--sustain-primary);
+    --ms-loader-primary-fade-color: rgba(53, 92, 83, 0.20);
+    --ms-loader-primary-contrast-color: #ffffff;
+}
+
+
+/*
+ * Open Sans throughout MapStore
+ */
+.msgapi .gn-theme,
+.msgapi .gn-theme input,
+.msgapi .gn-theme textarea,
+.msgapi .gn-theme select,
+.msgapi .gn-theme button,
+.msgapi .gn-theme .btn {
+    font-family: var(--font-body) !important;
+}
+
+
+/*
+ * Standard buttons
+ */
+.msgapi .gn-theme {
+    --ms-button-color: #333333;
+    --ms-button-bg: #ffffff;
+    --ms-button-border-color: #dddddd;
+
+    --ms-button-hover-color: #ffffff;
+    --ms-button-hover-bg: var(--sustain-green);
+    --ms-button-hover-border-color: var(--sustain-green);
+
+    --ms-button-active-color: #ffffff;
+    --ms-button-active-bg: var(--sustain-primary);
+    --ms-button-active-border-color: var(--sustain-primary);
+
+    --ms-button-active-hover-color: #ffffff;
+    --ms-button-active-hover-bg: var(--sustain-green);
+    --ms-button-active-hover-border-color: var(--sustain-green);
+}
+
+
+/*
+ * Primary buttons
+ */
+.msgapi .gn-theme {
+    --ms-button-primary-color: #ffffff;
+    --ms-button-primary-bg: var(--sustain-primary);
+    --ms-button-primary-border-color: var(--sustain-primary);
+
+    --ms-button-primary-focus-color: #ffffff;
+    --ms-button-primary-focus-bg: var(--sustain-primary);
+    --ms-button-primary-focus-border-color: var(--sustain-primary);
+
+    --ms-button-primary-hover-color: #ffffff;
+    --ms-button-primary-hover-bg: var(--sustain-green);
+    --ms-button-primary-hover-border-color: var(--sustain-green);
+
+    --ms-button-primary-active-color: #ffffff;
+    --ms-button-primary-active-bg: var(--sustain-primary);
+    --ms-button-primary-active-border-color: var(--sustain-primary);
+
+    --ms-button-primary-active-hover-color: #ffffff;
+    --ms-button-primary-active-hover-bg: var(--sustain-green);
+    --ms-button-primary-active-hover-border-color: var(--sustain-green);
+}
+
+
+/*
+ * Success buttons
+ */
+.msgapi .gn-theme {
+    --ms-button-success-color: #ffffff;
+    --ms-button-success-bg: var(--sustain-green);
+    --ms-button-success-border-color: var(--sustain-green);
+
+    --ms-button-success-hover-color: #ffffff;
+    --ms-button-success-hover-bg: var(--sustain-primary);
+    --ms-button-success-hover-border-color: var(--sustain-primary);
+
+    --ms-button-success-active-color: #ffffff;
+    --ms-button-success-active-bg: var(--sustain-primary);
+    --ms-button-success-active-border-color: var(--sustain-primary);
+
+    --ms-button-success-active-hover-color: #ffffff;
+    --ms-button-success-active-hover-bg: var(--sustain-dark);
+    --ms-button-success-active-hover-border-color: var(--sustain-dark);
+}
+
+
+/*
+ * Button shape
+ */
+.msgapi button,
+.msgapi .btn,
+.msgapi .btn-group > .btn,
+.msgapi input[type="button"],
+.msgapi input[type="submit"],
+.msgapi .btn-primary {
+    border-radius: 10px !important;
+}
+
+
+/*
+ * Direct primary button styling
+ */
+.msgapi .btn-primary,
+.msgapi .btn-primary:hover,
+.msgapi .btn-primary:focus,
+.msgapi .btn-primary:active {
+    color: #ffffff;
+    border-radius: 10px !important;
+}
+
+.msgapi .btn-primary {
+    background-color: var(--sustain-primary);
+    border-color: var(--sustain-primary);
+}
+
+.msgapi .btn-primary:hover,
+.msgapi .btn-primary:focus,
+.msgapi .btn-primary:active {
+    background-color: var(--sustain-green);
+    border-color: var(--sustain-green);
+}
+
+
+/*
+ * Button transitions
+ */
+.msgapi .btn,
+.msgapi .btn-primary,
+.msgapi button {
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+
+/*
+ * Links
+ */
+.msgapi a {
+    color: var(--sustain-primary);
+}
+
+.msgapi a:hover,
+.msgapi a:focus {
+    color: var(--sustain-green);
+}
+
+
+/*
+ * Navigation hover
+ */
+.msgapi .navbar a:hover,
+.msgapi .navbar-nav > li > a:hover,
+.msgapi .navbar-nav > li > a:focus {
+    color: var(--sustain-green);
+}
+
+.msgapi .navbar a:hover,
+.msgapi .navbar-nav > li > a:hover {
+    border-bottom-color: var(--sustain-green) !important;
+}
+
+
+/*
+ * Form controls / focus
+ */
+.msgapi .form-control:focus,
+.msgapi input:focus,
+.msgapi textarea:focus,
+.msgapi select:focus {
+    border-color: var(--sustain-green) !important;
+    box-shadow: 0 0 0 2px rgba(132, 197, 92, 0.20) !important;
+}
+
+
+/*
+ * Selection
+ */
+::selection {
+    background: var(--sustain-green);
+    color: #ffffff;
+}
+
+
+/*
+ * Panels / cards
+ */
+.msgapi .gn-theme .panel,
+.msgapi .gn-theme .card {
+    border-radius: 10px;
+}
+
+
+/*
+ * Loader text
+ */
+.gn-main-event-text {
+    font-family: var(--font-body) !important;
+}
+
+
+/*
+ * Jumbotron
+ *
+ * Preserve the existing hero image without the dark overlay.
+ */
+#gn-hero {
+    background-blend-mode: normal !important;
+}
+
+#gn-hero .gn-hero-description,
+#gn-hero .gn-hero-description h1,
+#gn-hero .gn-hero-description p {
+    color: transparent !important;
+}
+
+#gn-hero .jumbotron {
+    background-color: transparent !important;
+
+}
+
+```css

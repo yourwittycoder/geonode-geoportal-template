@@ -28,12 +28,16 @@ try:
 except ImportError:
     from geonode.settings import *
 
+# Register the Sustain GeoPortal project app
+INSTALLED_APPS = tuple(INSTALLED_APPS) + (
+    "geonode_project.apps.AppConfig",
+)
+
 # Sustain GeoPortal: use direct OGR/PostGIS import instead of dynamic models
 IMPORTER_ENABLE_DYN_MODELS = False
 
 # Sustain GeoPortal custom middleware
 MIDDLEWARE = MIDDLEWARE + (
-	"geonode_project.middleware.login_required.SustainLoginRequiredMiddleware",
 )
 
 #
@@ -70,7 +74,12 @@ STATICFILES_DIRS = [
 # Location of locale files
 LOCALE_PATHS = (os.path.join(LOCAL_ROOT, "locale"),) + LOCALE_PATHS
 
-TEMPLATES[0]["DIRS"].insert(0, os.path.join(LOCAL_ROOT, "templates"))
+PROJECT_TEMPLATE_DIR = os.path.join(LOCAL_ROOT, "templates")
+
+TEMPLATES[0]["DIRS"] = [
+    PROJECT_TEMPLATE_DIR,
+    *[d for d in TEMPLATES[0]["DIRS"] if d != PROJECT_TEMPLATE_DIR],
+]
 loaders = TEMPLATES[0]["OPTIONS"].get("loaders") or [
     "django.template.loaders.filesystem.Loader",
     "django.template.loaders.app_directories.Loader",

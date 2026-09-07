@@ -1,0 +1,480 @@
+{% block content %}
+<style>
+
+/* =========================================================
+   SUSTAIN GEOPORTAL — MAPSTORE THEME
+   ========================================================= */
+
+.msgapi .gn-theme {
+
+    /* -----------------------------------------------------
+       Fonts
+       ----------------------------------------------------- */
+
+    --ms-font-family-sans-serif: "Open Sans", sans-serif;
+    --ms-font-family-serif: Georgia, "Times New Roman", Times, serif;
+    --ms-font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
+    --ms-font-family-base: "Open Sans", sans-serif;
+
+
+    /* -----------------------------------------------------
+       General
+       ----------------------------------------------------- */
+
+    --ms-main-bg: #ffffff;
+    --ms-main-color: #333333;
+    --ms-main-border-color: #dddddd;
+
+    --ms-main-variant-color: #333333;
+    --ms-main-variant-bg: #f5f5f5;
+
+    --ms-main-hover-color: #333333;
+    --ms-main-hover-bg: #f5f5f5;
+
+    --ms-mask-bg: rgba(255,255,255,.5);
+
+
+    /* -----------------------------------------------------
+       Links
+       ----------------------------------------------------- */
+
+    --ms-link-color: #355c53;
+    --ms-link-hover-color: #84c55c;
+
+
+    /* -----------------------------------------------------
+       Primary
+       ----------------------------------------------------- */
+
+    --ms-primary: #355c53;
+    --ms-primary-contrast: #ffffff;
+
+
+    /* -----------------------------------------------------
+       Info
+       ----------------------------------------------------- */
+
+    --ms-info: #355c53;
+    --ms-info-contrast: #ffffff;
+
+
+    /* -----------------------------------------------------
+       Success
+       ----------------------------------------------------- */
+
+    --ms-success: #84c55c;
+    --ms-success-contrast: #ffffff;
+
+
+    /* -----------------------------------------------------
+       Warning
+       ----------------------------------------------------- */
+
+    --ms-warning: #8BC34A;
+    --ms-warning-contrast: #ffffff;
+
+
+    /* -----------------------------------------------------
+       Danger
+       ----------------------------------------------------- */
+
+    --ms-danger: #a94442;
+    --ms-danger-contrast: #ffffff;
+
+
+    /* -----------------------------------------------------
+       Focus / selection
+       ----------------------------------------------------- */
+
+    --ms-focus-color: #84c55c;
+
+    --ms-selected-color: #355c53;
+
+    --ms-selected-bg: rgba(132,197,92,.20);
+
+    --ms-selected-hover-bg: rgba(132,197,92,.10);
+
+
+    /* -----------------------------------------------------
+       Placeholder / disabled
+       ----------------------------------------------------- */
+
+    --ms-placeholder-color: #777777;
+    --ms-placeholder-bg: #f5f5f5;
+
+    --ms-disabled-color: #999999;
+    --ms-disabled-bg: #eeeeee;
+
+
+    /* -----------------------------------------------------
+       Images
+       ----------------------------------------------------- */
+
+    --ms-image-color: #dddddd;
+    --ms-image-bg: #f5f5f5;
+
+
+    /* -----------------------------------------------------
+       Footer
+       ----------------------------------------------------- */
+
+    --ms-footer-color: #333333;
+    --ms-footer-bg: #ffffff;
+
+    --ms-footer-link-color: #355c53;
+    --ms-footer-link-hover-color: #84c55c;
+
+
+    /* -----------------------------------------------------
+       Loader
+       ----------------------------------------------------- */
+
+    --ms-loader-color: #333333;
+    --ms-loader-fade-color: rgba(51,51,51,.2);
+
+    --ms-loader-primary-color: #355c53;
+    --ms-loader-primary-fade-color: rgba(53,92,83,.2);
+
+    --ms-loader-primary-contrast-color: #ffffff;
+    --ms-loader-primary-contrast-fade-color: rgba(255,255,255,.2);
+
+
+    /* -----------------------------------------------------
+       Badge
+       ----------------------------------------------------- */
+
+    --ms-badge-color: #ffffff;
+    --ms-badge-bg: #355c53;
+
+
+    /* -----------------------------------------------------
+       Jumbotron
+       ----------------------------------------------------- */
+
+    --ms-jumbotron-color: #ffffff;
+    --ms-jumbotron-bg: #2a4745;
+
+
+    /* -----------------------------------------------------
+       Timeline
+       ----------------------------------------------------- */
+
+    --ms-timeline-selected-bg: rgba(132,197,92,.08);
+    --ms-timeline-histogram-bg: rgba(132,197,92,.5);
+    --ms-timeline-histogram-color: #355c53;
+    --ms-timeline-range-bg: rgba(42,71,69,.2);
+    --ms-timeline-playback-range-bg: rgba(132,197,92,.2);
+
+
+    /* =====================================================
+       STANDARD BUTTONS
+       ===================================================== */
+
+    --ms-button-color: #333333;
+    --ms-button-bg: #ffffff;
+    --ms-button-border-color: #dddddd;
+
+    --ms-button-focus-color: #333333;
+    --ms-button-focus-bg: #ffffff;
+    --ms-button-focus-border-color: #84c55c;
+
+    --ms-button-hover-color: #ffffff;
+    --ms-button-hover-bg: #84c55c;
+    --ms-button-hover-border-color: #84c55c;
+
+    --ms-button-active-color: #ffffff;
+    --ms-button-active-bg: #355c53;
+    --ms-button-active-border-color: #355c53;
+
+    --ms-button-active-hover-color: #ffffff;
+    --ms-button-active-hover-bg: #84c55c;
+    --ms-button-active-hover-border-color: #84c55c;
+
+    --ms-button-disabled-color: #999999;
+    --ms-button-disabled-bg: #eeeeee;
+    --ms-button-disabled-border-color: #eeeeee;
+
+
+    /* =====================================================
+       PRIMARY BUTTONS
+       ===================================================== */
+
+    --ms-button-primary-color: #ffffff;
+    --ms-button-primary-bg: #355c53;
+    --ms-button-primary-border-color: #355c53;
+
+    --ms-button-primary-focus-color: #ffffff;
+    --ms-button-primary-focus-bg: #355c53;
+    --ms-button-primary-focus-border-color: #84c55c;
+
+    --ms-button-primary-hover-color: #ffffff;
+    --ms-button-primary-hover-bg: #84c55c;
+    --ms-button-primary-hover-border-color: #84c55c;
+
+    --ms-button-primary-active-color: #ffffff;
+    --ms-button-primary-active-bg: #355c53;
+    --ms-button-primary-active-border-color: #355c53;
+
+    --ms-button-primary-active-hover-color: #ffffff;
+    --ms-button-primary-active-hover-bg: #84c55c;
+    --ms-button-primary-active-hover-border-color: #84c55c;
+
+    --ms-button-primary-disabled-color: #999999;
+    --ms-button-primary-disabled-bg: #eeeeee;
+    --ms-button-primary-disabled-border-color: #eeeeee;
+
+
+    /* =====================================================
+       SUCCESS BUTTONS
+       ===================================================== */
+
+    --ms-button-success-color: #ffffff;
+    --ms-button-success-bg: #84c55c;
+    --ms-button-success-border-color: #84c55c;
+
+    --ms-button-success-focus-color: #ffffff;
+    --ms-button-success-focus-bg: #84c55c;
+    --ms-button-success-focus-border-color: #355c53;
+
+    --ms-button-success-hover-color: #ffffff;
+    --ms-button-success-hover-bg: #355c53;
+    --ms-button-success-hover-border-color: #355c53;
+
+    --ms-button-success-active-color: #ffffff;
+    --ms-button-success-active-bg: #355c53;
+    --ms-button-success-active-border-color: #355c53;
+
+    --ms-button-success-active-hover-color: #ffffff;
+    --ms-button-success-active-hover-bg: #2a4745;
+    --ms-button-success-active-hover-border-color: #2a4745;
+
+
+    /* =====================================================
+       BUTTON TRAY
+       ===================================================== */
+
+    --ms-button-tray-color: #333333;
+    --ms-button-tray-bg: #ffffff;
+    --ms-button-tray-border-color: #355c53;
+
+    --ms-button-tray-focus-color: #333333;
+    --ms-button-tray-focus-bg: #ffffff;
+    --ms-button-tray-focus-border-color: #84c55c;
+
+    --ms-button-tray-hover-color: #ffffff;
+    --ms-button-tray-hover-bg: #84c55c;
+    --ms-button-tray-hover-border-color: #84c55c;
+
+    --ms-button-tray-active-color: #ffffff;
+    --ms-button-tray-active-bg: #355c53;
+    --ms-button-tray-active-border-color: #355c53;
+
+    --ms-button-tray-active-hover-color: #ffffff;
+    --ms-button-tray-active-hover-bg: #84c55c;
+    --ms-button-tray-active-hover-border-color: #84c55c;
+}
+
+
+/* =========================================================
+   OPEN SANS
+   ========================================================= */
+
+.msgapi .gn-theme,
+.msgapi .gn-theme *,
+.msgapi .gn-theme input,
+.msgapi .gn-theme textarea,
+.msgapi .gn-theme select,
+.msgapi .gn-theme button,
+.msgapi .gn-theme .btn {
+    font-family: "Open Sans", sans-serif !important;
+}
+
+.gn-main-event-text {
+    font-family: "Open Sans", sans-serif !important;
+}
+
+
+/* =========================================================
+   BUTTON SHAPE + SHADOW
+   ========================================================= */
+
+.msgapi button,
+.msgapi .btn,
+.msgapi .btn-group > .btn,
+.msgapi input[type="button"],
+.msgapi input[type="submit"],
+.msgapi .btn-primary {
+    border-radius: 10px !important;
+}
+
+.msgapi .gn-theme .btn {
+    transition:
+        background-color .15s ease,
+        border-color .15s ease,
+        color .15s ease,
+        box-shadow .15s ease;
+}
+
+.msgapi .gn-theme .btn-primary {
+    color: #ffffff !important;
+    background-color: #355c53 !important;
+    border-color: #355c53 !important;
+
+    box-shadow:
+        0 2px 6px rgba(42,71,69,.10);
+}
+
+.msgapi .gn-theme .btn-primary:hover,
+.msgapi .gn-theme .btn-primary:focus {
+    color: #ffffff !important;
+    background-color: #84c55c !important;
+    border-color: #84c55c !important;
+
+    box-shadow:
+        0 4px 10px rgba(42,71,69,.16);
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+.msgapi .gn-theme a {
+    color: #355c53;
+}
+
+.msgapi .gn-theme a:hover,
+.msgapi .gn-theme a:focus {
+    color: #84c55c;
+}
+
+
+/* =========================================================
+   NAVIGATION HOVER
+   ========================================================= */
+
+.msgapi .navbar a:hover,
+.msgapi .navbar-nav > li > a:hover,
+.msgapi .navbar-nav > li > a:focus {
+    color: #84c55c !important;
+}
+
+.msgapi .navbar a:hover,
+.msgapi .navbar-nav > li > a:hover {
+    border-bottom-color: #84c55c !important;
+}
+
+
+/* =========================================================
+   FORM CONTROLS
+   ========================================================= */
+
+.msgapi .gn-theme .form-control:focus,
+.msgapi .gn-theme input:focus,
+.msgapi .gn-theme textarea:focus,
+.msgapi .gn-theme select:focus {
+    border-color: #84c55c !important;
+
+    box-shadow:
+        0 0 0 2px rgba(132,197,92,.20) !important;
+}
+
+
+/* =========================================================
+   CARDS / PANELS
+   ========================================================= */
+
+.msgapi .gn-theme .card,
+.msgapi .gn-theme .panel {
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 14px rgba(42,71,69,.08);
+
+    transition:
+        box-shadow .15s ease;
+}
+
+.msgapi .gn-theme .card:hover,
+.msgapi .gn-theme .panel:hover {
+    box-shadow:
+        0 8px 22px rgba(42,71,69,.12);
+}
+
+
+/* =========================================================
+   TAGS
+   ========================================================= */
+
+:root {
+    --tag-color: #355c53;
+}
+
+
+/* =========================================================
+   TEXT SELECTION
+   ========================================================= */
+
+::selection {
+    background: #84c55c;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   JUMBOTRON / HERO
+   ========================================================= */
+
+/*
+   Preserve the existing hero image.
+   Remove the dark blend/overlay.
+*/
+
+#gn-hero {
+    background-blend-mode: normal !important;
+}
+
+
+/*
+   Keep the hero structure and height,
+   but hide the existing hero text.
+*/
+
+#gn-hero .gn-hero-description {
+    color: transparent !important;
+}
+
+#gn-hero .gn-hero-description h1,
+#gn-hero .gn-hero-description p {
+    color: transparent !important;
+}
+
+
+/*
+   Keep the original background image visible.
+*/
+
+#gn-hero .jumbotron {
+    background-color: transparent !important;
+}
+
+
+/*
+   Remove common pseudo-element overlays.
+*/
+
+#gn-hero::before,
+#gn-hero::after,
+#gn-hero .jumbotron::before,
+#gn-hero .jumbotron::after {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+
+/* =========================================================
+   END — SUSTAIN GEOPORTAL THEME
+   ========================================================= */
+
+</style>
+{% endblock %}

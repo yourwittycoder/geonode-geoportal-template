@@ -26,7 +26,8 @@ def run_setup_hooks(*args, **kwargs):
     from .celeryapp import app as celeryapp
 
     LOCAL_ROOT = os.path.abspath(os.path.dirname(__file__))
-    settings.TEMPLATES[0]["DIRS"].insert(0, os.path.join(LOCAL_ROOT, "templates"))
+    project_templates = os.path.join(LOCAL_ROOT, "templates")
+    settings.TEMPLATES[0]["DIRS"] = [project_templates] + [d for d in settings.TEMPLATES[0]["DIRS"] if d != project_templates]
 
     if celeryapp not in settings.INSTALLED_APPS:
         settings.INSTALLED_APPS += (celeryapp,)
